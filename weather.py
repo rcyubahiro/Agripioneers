@@ -48,8 +48,8 @@ def save_user(name, location):
     finally:
         db.close()
 
-# Function to save weather data
-def save_weather(user_id, weather_condition, temperature, humidity):
+# FUNCTION TO save weather data
+def save_weather(user_id, weather_condition,  temperature,  humidity):
     db = connect_db()
     if not db:
         return
@@ -63,7 +63,7 @@ def save_weather(user_id, weather_condition, temperature, humidity):
     finally:
         db.close()
 
-# Functiontogetrecommendations
+# Function to get recommendations
 def get_recommendations(weather_condition):
     recommendations = {
         "Clouds": "Consider planting leafy greens such as lettuce and spinach.",
