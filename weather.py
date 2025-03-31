@@ -130,6 +130,4 @@ def main():
     else:
         print("No weather data available.")
 
-if __name__ == "__main__":
-    main()
 
