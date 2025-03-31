@@ -42,12 +42,12 @@ def save_user(name, location):
             query = "INSERT INTO users (name, location) VALUES (%s, %s)"
             cursor.execute(query, (name, location))
             db.commit()
-            print("User registered successfully!")
+            print("User successfuly registered!")
     except pymysql.MySQLError as e:
         print(f"Database error: {e}")
     finally:
         db.close()
-
+	
 # Function to save weather data
 def save_weather(user_id, weather_condition, temperature, humidity):
     db = connect_db()
