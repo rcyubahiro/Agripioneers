@@ -1,6 +1,6 @@
 
 
-## Description
+**## Description**
 This is a command-line-based Weather and Gardening Recommendation application. The program fetches weather data for a given location, recommends suitable plants based on the weather condition, provides gardening tips, and allows users to interact with the database for storing their choices.
 
 ## Features
