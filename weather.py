@@ -10,7 +10,7 @@ DB_CONFIG = {
     "cursorclass": pymysql.cursors.DictCursor  # Fetch results as dictionaries
 }
 
-# OpenWeatherMap API
+# Open Weather Map API
 API_KEY = "86d63794f43673e581ee542a46a9d96c"
 BASE_URL = "http://api.openweathermap.org/data/2.5/weather"
 
@@ -63,7 +63,7 @@ def save_weather(user_id, weather_condition, temperature, humidity):
     finally:
         db.close()
 
-# Function to get recommendations
+# Functiontogetrecommendations
 def get_recommendations(weather_condition):
     recommendations = {
         "Clouds": "Consider planting leafy greens such as lettuce and spinach.",
