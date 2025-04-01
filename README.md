@@ -19,7 +19,7 @@ This is a command-line-based Weather and Gardening Recommendation application. T
 ## Database Schema
 The application requires the following tables in MySQL:
 
-### users Table
+# users Table
 sql
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
