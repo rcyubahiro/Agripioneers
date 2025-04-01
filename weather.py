@@ -8,9 +8,10 @@ DB_CONFIG = {
     "password": "rob",
     "database": "Robert",
     "cursorclass": pymysql.cursors.DictCursor  # Fetch results as dictionaries
+# OpenWeatherMap API
 }
-
-
+API_KEY = "86d63794f43673e581ee542a46a9d96c"
+BASE_URL = "http://api.openweathermap.org/data/2.5/weather"
 
 # Function to connect to MySQL database
 def connect_db():
@@ -40,12 +41,12 @@ def save_user(name, location):
             query = "INSERT INTO users (name, location) VALUES (%s, %s)"
             cursor.execute(query, (name, location))
             db.commit()
-            print("User successfuly registered!")
+            print("User registered successfully!")
     except pymysql.MySQLError as e:
         print(f"Database error: {e}")
     finally:
         db.close()
-	
+
 # Function to save weather data
 def save_weather(user_id, weather_condition, temperature, humidity):
     db = connect_db()
@@ -96,40 +97,37 @@ def main():
     name = input("Enter your name: ")
     location = input("Enter your location (city, country): ")
     save_user(name, location)
-    
+
     weather_location = input("Enter your location for weather updates: ")
     weather_data = get_weather(weather_location)
-    
+
     if weather_data:
         weather_condition = weather_data["weather"][0]["main"]
         temperature = weather_data["main"]["temp"]
         humidity = weather_data["main"]["humidity"]
-        
+
         print("\n--- Weather Information ---")
         print(f"Weather Condition: {weather_condition}")
-        
+
         recommendation = get_recommendations(weather_condition)
         print("\nRecommendation:", recommendation)
-        
+
         plants = get_plants(weather_condition)
         print("\nSelect a plant:")
         for i, plant in enumerate(plants, 1):
             print(f"{i}. {plant}")
-        
+
         choice = int(input("Enter the number of your chosen plant: "))
         selected_plant = plants[choice - 1]
         print(f"You have selected: {selected_plant}")
-        
+
         gardening_tips = get_gardening_tips(weather_condition)
         print("\nGardening Tips:")
         for tip in gardening_tips:
             print(f"- {tip}")
-        
+
     else:
         print("No weather data available.")
 
 if __name__ == "__main__":
     main()
-
-
-
