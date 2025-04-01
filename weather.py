@@ -101,7 +101,10 @@ def main():
     weather_location = input("Enter your location for weather updates: ")
     weather_data = get_weather(weather_location)
 
-   
+    if weather_data:
+        weather_condition = weather_data["weather"][0]["main"]
+        temperature = weather_data["main"]["temp"]
+        humidity = weather_data["main"]["humidity"]
 
         print("\n--- Weather Information ---")
         print(f"Weather Condition: {weather_condition}")
