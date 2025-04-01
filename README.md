@@ -59,7 +59,7 @@ CREATE TABLE recommendations (
 );
 
 
-### gardening_tips Table
+# gardening tips Table
 sql
 CREATE TABLE gardening_tips (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -69,7 +69,7 @@ CREATE TABLE gardening_tips (
 );
 
 
-## Installation
+# Installation
 1. Clone the repository:
    sh
    git clone https://github.com/your-repo/cli-weather-app.git
@@ -82,7 +82,7 @@ CREATE TABLE gardening_tips (
 3. Set up the MySQL database and update DB_CONFIG in the script.
 4. Obtain an OpenWeatherMap API key and replace API_KEY in the script.
 
-## Usage
+# Usage
 Run the program using:
 sh
 python myfile.py
