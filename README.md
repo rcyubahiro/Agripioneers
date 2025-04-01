@@ -16,7 +16,7 @@ This is a command-line-based Weather and Gardening Recommendation application. T
 - MySQL (via pymysql library)
 - OpenWeatherMap API
 
-## Database Schema
+## Database Structure
 The application requires the following tables in MySQL:
 
 # users Table
