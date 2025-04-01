@@ -1,3 +1,4 @@
+#!/bin/bash
 import pymysql
 import requests
 
@@ -8,8 +9,9 @@ DB_CONFIG = {
     "password": "rob",
     "database": "Robert",
     "cursorclass": pymysql.cursors.DictCursor  # Fetch results as dictionaries
+}  # ← Added missing closing brace
+
 # OpenWeatherMap API
-}
 API_KEY = "86d63794f43673e581ee542a46a9d96c"
 BASE_URL = "http://api.openweathermap.org/data/2.5/weather"
 
@@ -118,7 +120,7 @@ def main():
             print(f"{i}. {plant}")
 
         choice = int(input("Enter the number of your chosen plant: "))
-        selected_plant = plants[choice - 1]
+        selected_plant = plants[choice - 1]  # Fixed list access
         print(f"You have selected: {selected_plant}")
 
         gardening_tips = get_gardening_tips(weather_condition)
