@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
             check_exit(choice)
 
             if choice == '1':
@@ -96,6 +96,36 @@ def register_user():
     print(f"Thank you for subscribing, {name}!")
     print(f"Your subscription is valid until {end_date}")
     return True
+<<<<<<< HEAD
+def get_weather_data(location):
+    """Fetch weather data from OpenWeatherMap API"""
+    params = {
+        "q": location,
+        "appid": API_KEY,
+        "units": "metric"
+    }
+    response = requests.get(BASE_URL, params=params)
+    if response.status_code == 200:
+        return response.json()
+    print(f"Error: Unable to fetch weather data. Status code: {response.status_code}")
+    return None
+=======
+def check_subscription(id_card):
+    """Check if user has an active subscription"""
+    cursor.execute('''
+    SELECT name, subscription_end FROM users 
+    WHERE id_card=? AND payment_status=1 AND subscription_end >= date('now')
+    ''', (id_card,))
+    user = cursor.fetchone()
+    
+    if user:
+        print(f"\nWelcome back, {user[0]}!")
+        print(f"Your subscription is valid until {user[1]}")
+        return True
+    
+    print("\nError: No active subscription found.")
+    print("Please register and pay the subscription fee to access the service.")
+    return FalseO
 def get_weather_data(location):
     """Fetch weather data from OpenWeatherMap API"""
     params = {
