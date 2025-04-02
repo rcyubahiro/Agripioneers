@@ -96,3 +96,15 @@ def register_user():
     print(f"Thank you for subscribing, {name}!")
     print(f"Your subscription is valid until {end_date}")
     return True
+def get_weather_data(location):
+    """Fetch weather data from OpenWeatherMap API"""
+    params = {
+        "q": location,
+        "appid": API_KEY,
+        "units": "metric"
+    }
+    response = requests.get(BASE_URL, params=params)
+    if response.status_code == 200:
+        return response.json()
+    print(f"Error: Unable to fetch weather data. Status code: {response.status_code}")
+    return None
