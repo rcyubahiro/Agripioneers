@@ -1,14 +1,26 @@
-import pymysql
+#!/usr/bin/env python3
 import requests
+import json
+import matplotlib.pyplot as plt
+import sqlite3
+from datetime import datetime, timedelta
 
-# Database Credentials
-DB_CONFIG = {
-    "host": "localhost",
-    "user": "root",
-    "password": "rob",
-    "database": "Robert",
-    "cursorclass": pymysql.cursors.DictCursor  # Fetch results as dictionaries
-}
+ # Database setup
+conn = sqlite3.connect('weather_users.db')
+cursor = conn.cursor()
+
+# Create tables if they don't exist
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    id_card TEXT UNIQUE NOT NULL,
+    subscription_date TEXT,
+    subscription_end TEXT,
+    payment_status BOOLEAN DEFAULT FALSE
+)
+''')
+conn.commit()
 
 # OpenWeatherMap API
 API_KEY = "86d63794f43673e581ee542a46a9d96c"
