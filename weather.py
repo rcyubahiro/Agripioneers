@@ -1,53 +1,49 @@
-import pymysql
+#!/usr/bin/env python3
 import requests
+import json
+import matplotlib.pyplot as plt
+import sqlite3
+from datetime import datetime, timedelta
 
-# Database Credentials
-DB_CONFIG = {
-    "host": "localhost",
-    "user": "root",
-    "password": "rob",
-    "database": "Robert",
-    "cursorclass": pymysql.cursors.DictCursor  # Fetch results as dictionaries
-}
+# Database setup
+conn = sqlite3.connect('weather_users.db')
+cursor = conn.cursor()
 
+<<<<<<< HEAD
 # Open Weather Map API
 API_KEY = "86d63794f43673e581ee542a46a9d96c"
 BASE_URL = "http://api.openweathermap.org/data/2.5/weather"
+=======
+# Create tables if they don't exist
+cursor.execute('''
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    id_card TEXT UNIQUE NOT NULL,
+    subscription_date TEXT,
+    subscription_end TEXT,
+    payment_status BOOLEAN DEFAULT FALSE
+)
+''')
+conn.commit()
+>>>>>>> 6c4120cdeb1855f19a30d704bfd6a52fc0d30fb1
 
-# Function to connect to MySQL database
-def connect_db():
-    try:
-        return pymysql.connect(**DB_CONFIG)
-    except pymysql.MySQLError as e:
-        print(f"Database connection error: {e}")
-        return None
 
-# Function to fetch weather data from API
-def get_weather(location):
-    params = {"q": location, "appid": API_KEY, "units": "metric"}
-    response = requests.get(BASE_URL, params=params)
-    if response.status_code == 200:
-        return response.json()
-    else:
-        print(f"Error fetching weather data. Status code: {response.status_code}")
-        return None
+            check_exit(choice)
 
-# Function to save user data
-def save_user(name, location):
-    db = connect_db()
-    if not db:
-        return
-    try:
-        with db.cursor() as cursor:
-            query = "INSERT INTO users (name, location) VALUES (%s, %s)"
-            cursor.execute(query, (name, location))
-            db.commit()
-            print("User registered successfully!")
-    except pymysql.MySQLError as e:
-        print(f"Database error: {e}")
-    finally:
-        db.close()
+            if choice == '1':
+                if not register_user():
+                    continue
+                id_card = input("\nPlease enter your ID card number to continue: ")
+                check_exit(id_card)
+            elif choice == '2':
+                id_card = input("Enter your ID card number: ")
+                check_exit(id_card)
+            else:
+                print("Invalid selection")
+                continue
 
+<<<<<<< HEAD
 # FUNCTION TO save weather data
 def save_weather(user_id, weather_condition,  temperature,  humidity):
     db = connect_db()
@@ -62,74 +58,149 @@ def save_weather(user_id, weather_condition,  temperature,  humidity):
         print(f"Database error: {e}")
     finally:
         db.close()
+=======
+            if not check_subscription(id_card):
+                continue
+>>>>>>> 6c4120cdeb1855f19a30d704bfd6a52fc0d30fb1
 
-# Function to get recommendations
-def get_recommendations(weather_condition):
-    recommendations = {
-        "Clouds": "Consider planting leafy greens such as lettuce and spinach.",
-        "Rain": "Opt for water-tolerant plants like rice and taro.",
-        "Sunny": "Great conditions for tomatoes, peppers, and sunflowers.",
-        "Snow": "Consider indoor gardening with herbs and microgreens."
-    }
-    return recommendations.get(weather_condition, "No recommendations available.")
+            while True:
+                location = input("\nEnter location to analyze (city, country) or 'Q' to quit: ")
+                check_exit(location)
 
-# Function to get plant recommendations
-def get_plants(weather_condition):
-    plants = {
-        "Clouds": ["Lettuce", "Spinach", "Cabbage"],
-        "Rain": ["Rice", "Taro", "Watercress"],
-        "Sunny": ["Tomatoes", "Peppers", "Sunflowers"],
-        "Snow": ["Herbs", "Microgreens", "Mushrooms"]
-    }
-    return plants.get(weather_condition, ["No plants available."])
+                weather_data = get_weather_data(location)
+                if not weather_data:
+                    continue
 
-# Function to get gardening tips
-def get_gardening_tips(weather_condition):
-    tips = {
-        "Clouds": ["Ensure proper drainage to avoid root rot.", "Use organic mulch to retain moisture."],
-        "Rain": ["Avoid overwatering as soil is already saturated.", "Choose raised beds to prevent waterlogging."],
-        "Sunny": ["Water early in the morning to prevent evaporation.", "Use shade cloth for delicate plants."],
-        "Snow": ["Use grow lights for indoor plants.", "Maintain indoor humidity to prevent plant stress."]
-    }
-    return tips.get(weather_condition, ["No tips available."])
+                display_weather_forecast(weather_data)
 
-# Main function
-def main():
-    name = input("Enter your name: ")
-    location = input("Enter your location (city, country): ")
-    save_user(name, location)
-    
-    weather_location = input("Enter your location for weather updates: ")
-    weather_data = get_weather(weather_location)
-    
-    if weather_data:
-        weather_condition = weather_data["weather"][0]["main"]
-        temperature = weather_data["main"]["temp"]
-        humidity = weather_data["main"]["humidity"]
-        
-        print("\n--- Weather Information ---")
-        print(f"Weather Condition: {weather_condition}")
-        
-        recommendation = get_recommendations(weather_condition)
-        print("\nRecommendation:", recommendation)
-        
-        plants = get_plants(weather_condition)
-        print("\nSelect a plant:")
-        for i, plant in enumerate(plants, 1):
-            print(f"{i}. {plant}")
-        
-        choice = int(input("Enter the number of your chosen plant: "))
-        selected_plant = plants[choice - 1]
-        print(f"You have selected: {selected_plant}")
-        
-        gardening_tips = get_gardening_tips(weather_condition)
-        print("\nGardening Tips:")
-        for tip in gardening_tips:
-            print(f"- {tip}")
-        
-    else:
-        print("No weather data available.")
+                # Calculate averages for land analysis
+                temps = [entry['main']['temp'] for entry in weather_data['list']]
+                rains = [entry.get('rain', {}).get('3h', 0) for entry in weather_data['list']]
+                avg_temp = sum(temps)/len(temps)
+                avg_rain = sum(rains)/len(rains)
+
+                print("\n--- Land Analysis ---")
+                print(analyze_land(avg_rain, avg_temp))
+
+                graph_choice = input("\nShow weather graphs? (y/n/Q): ").upper()
+                check_exit(graph_choice)
+                if graph_choice == 'Y':
+                    plot_weather_data(weather_data)
+                elif graph_choice == 'Q':
+                    break
+    finally:
+        conn.close()
 
 if __name__ == "__main__":
     main()
+# API configuration
+API_KEY = "86d63794f43673e581ee542a46a9d96c"
+BASE_URL = "http://api.openweathermap.org/data/2.5/forecast"
+SUBSCRIPTION_PRICE = 5  # USD per year          
 
+def register_user():
+    """Register a new user with ID verification and subscription payment"""
+    print("\n--- User Registration ---")
+    print("(Press 'Q' at any time to quit)\n")
+    name = input("Enter your full name: ")
+    check_exit(name)
+    
+    id_card = input("Enter your government-issued ID card number: ")
+    check_exit(id_card)
+    
+    # Check if user already exists
+    cursor.execute("SELECT * FROM users WHERE id_card=?", (id_card,))
+    if cursor.fetchone():
+        print("Error: This ID card is already registered.")
+        return False
+    
+    # Payment processing (simulated)
+    print(f"\nSubscription Price: ${SUBSCRIPTION_PRICE} per year")
+    payment = input("Enter payment amount (USD): ")
+    check_exit(payment)
+    
+    try:
+        payment = float(payment)
+        if payment < SUBSCRIPTION_PRICE:
+            print("Error: Insufficient payment amount.")
+            return False
+    except ValueError:
+        print("Error: Invalid payment amount.")
+        return False
+    
+    # Calculate subscription dates
+    today = datetime.now().strftime("%Y-%m-%d")
+    end_date = (datetime.now() + timedelta(days=365)).strftime("%Y-%m-%d")
+    
+    # Store user data
+    cursor.execute('''
+    INSERT INTO users (name, id_card, subscription_date, subscription_end, payment_status)
+    VALUES (?, ?, ?, ?, ?)
+    ''', (name, id_card, today, end_date, True))
+    conn.commit()
+    
+    print("\nRegistration successful!")
+    print(f"Thank you for subscribing, {name}!")
+    print(f"Your subscription is valid until {end_date}")
+    return True
+<<<<<<< HEAD
+def get_weather_data(location):
+    """Fetch weather data from OpenWeatherMap API"""
+    params = {
+        "q": location,
+        "appid": API_KEY,
+        "units": "metric"
+    }
+    response = requests.get(BASE_URL, params=params)
+    if response.status_code == 200:
+        return response.json()
+    print(f"Error: Unable to fetch weather data. Status code: {response.status_code}")
+    return None
+=======
+def check_subscription(id_card):
+    """Check if user has an active subscription"""
+    cursor.execute('''
+    SELECT name, subscription_end FROM users 
+    WHERE id_card=? AND payment_status=1 AND subscription_end >= date('now')
+    ''', (id_card,))
+    user = cursor.fetchone()
+    
+    if user:
+        print(f"\nWelcome back, {user[0]}!")
+        print(f"Your subscription is valid until {user[1]}")
+        return True
+    
+    print("\nError: No active subscription found.")
+    print("Please register and pay the subscription fee to access the service.")
+    return FalseO
+def get_weather_data(location):
+    """Fetch weather data from OpenWeatherMap API"""
+    params = {
+        "q": location,
+        "appid": API_KEY,
+        "units": "metric"
+    }
+    response = requests.get(BASE_URL, params=params)
+    if response.status_code == 200:
+        return response.json()
+    print(f"Error: Unable to fetch weather data. Status code: {response.status_code}")
+    return None
+def plot_weather_data(data):
+    """Visualize weather data with matplotlib"""
+    dates = [entry['dt_txt'] for entry in data['list'][:20]]
+    temps = [entry['main']['temp'] for entry in data['list'][:20]]
+    rainfall = [entry.get('rain', {}).get('3h', 0) for entry in data['list'][:20]]
+
+    plt.figure(figsize=(12, 6))
+    plt.subplot(2, 1, 1)
+    plt.plot(dates, temps, 'r-o')
+    plt.title('Temperature Trend')
+    plt.ylabel('°C')
+
+    plt.subplot(2, 1, 2)
+    plt.bar(dates, rainfall, color='b')
+    plt.title('Rainfall')
+    plt.ylabel('mm')
+
+    plt.tight_layout()
+    plt.show()
