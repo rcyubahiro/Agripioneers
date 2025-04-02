@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
             check_exit(choice)
 
             if choice == '1':
