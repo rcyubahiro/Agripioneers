@@ -96,3 +96,20 @@ def register_user():
     print(f"Thank you for subscribing, {name}!")
     print(f"Your subscription is valid until {end_date}")
     return True
+def check_subscription(id_card):
+    """Check if user has an active subscription"""
+    cursor.execute('''
+    SELECT name, subscription_end FROM users 
+    WHERE id_card=? AND payment_status=1 AND subscription_end >= date('now')
+    ''', (id_card,))
+    user = cursor.fetchone()
+    
+    if user:
+        print(f"\nWelcome back, {user[0]}!")
+        print(f"Your subscription is valid until {user[1]}")
+        return True
+    
+    print("\nError: No active subscription found.")
+    print("Please register and pay the subscription fee to access the service.")
+    return FalseO
+
