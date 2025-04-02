@@ -44,12 +44,12 @@ Running the Application
 
 Clone the repository:
 
-git clone https://github.com/yourusername/weather-land-analysis.git
+git clone https://github.com/rcyubahiro/Agripioneers.git
 cd weather-land-analysis
 
 Run the Python script:
 
-python3 myfile.py
+python3 weather.py
 
 Usage
 
