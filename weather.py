@@ -49,4 +49,50 @@ if __name__ == "__main__":
 # API configuration
 API_KEY = "86d63794f43673e581ee542a46a9d96c"
 BASE_URL = "http://api.openweathermap.org/data/2.5/forecast"
-SUBSCRIPTION_PRICE = 5  # USD per year                                                                                                                                          
+SUBSCRIPTION_PRICE = 5  # USD per year          
+
+def register_user():
+    """Register a new user with ID verification and subscription payment"""
+    print("\n--- User Registration ---")
+    print("(Press 'Q' at any time to quit)\n")
+    name = input("Enter your full name: ")
+    check_exit(name)
+    
+    id_card = input("Enter your government-issued ID card number: ")
+    check_exit(id_card)
+    
+    # Check if user already exists
+    cursor.execute("SELECT * FROM users WHERE id_card=?", (id_card,))
+    if cursor.fetchone():
+        print("Error: This ID card is already registered.")
+        return False
+    
+    # Payment processing (simulated)
+    print(f"\nSubscription Price: ${SUBSCRIPTION_PRICE} per year")
+    payment = input("Enter payment amount (USD): ")
+    check_exit(payment)
+    
+    try:
+        payment = float(payment)
+        if payment < SUBSCRIPTION_PRICE:
+            print("Error: Insufficient payment amount.")
+            return False
+    except ValueError:
+        print("Error: Invalid payment amount.")
+        return False
+    
+    # Calculate subscription dates
+    today = datetime.now().strftime("%Y-%m-%d")
+    end_date = (datetime.now() + timedelta(days=365)).strftime("%Y-%m-%d")
+    
+    # Store user data
+    cursor.execute('''
+    INSERT INTO users (name, id_card, subscription_date, subscription_end, payment_status)
+    VALUES (?, ?, ?, ?, ?)
+    ''', (name, id_card, today, end_date, True))
+    conn.commit()
+    
+    print("\nRegistration successful!")
+    print(f"Thank you for subscribing, {name}!")
+    print(f"Your subscription is valid until {end_date}")
+    return True
