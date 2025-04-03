@@ -1,22 +1,4 @@
-Weather Analysis and Land Assessment
 
-Overview
-
-This Python based application provides weather forecasts, land assessment insights, and subscription-based user access. It uses the OpenWeatherMap API to retrieve weather data and provides analysis on temperature and rainfall trends. The application also includes a user registration system with subscription validation stored in an SQLite database.
-
-Features
-
-User Registration: Users can register using their full name and a government-issued ID card.
-
-Subscription System: Users pay a yearly subscription fee of $5 to access weather data.
-
-Weather Forecast: Fetches and displays weather conditions for any location.
-
-Land Assessment: Analyzes land conditions based on temperature and rainfall data.
-
-Data Visualization: Generates graphs for temperature and rainfall trends.
-
-Technologies Used
 
 Python 3
 
